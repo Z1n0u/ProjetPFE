@@ -4,7 +4,7 @@ namespace ProjetPFE.Server.DTO
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "User Name is required")]
+        [Required(ErrorMessage = "UserName is required")]
         public string? Username { get; set; }
 
         [EmailAddress]
@@ -13,10 +13,10 @@ namespace ProjetPFE.Server.DTO
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        public string? Password { get; set; }
+        public string? Motdepasse { get; set; }
         [DataType(DataType.Password)]
-        [Compare(nameof(Password))]
-        public string? ConfirmPassword { get; set; }
+        [Compare(nameof(Motdepasse))]
+        public string? ConfirmMotdepasse { get; set; }
         [Required(ErrorMessage = "nom is required")]
         public string? Nom { get; set; }
         [Required(ErrorMessage = "prenom is required")]
@@ -29,5 +29,8 @@ namespace ProjetPFE.Server.DTO
         public string? Adresse { get; set; }
         [Required(ErrorMessage = "matricule is required")]
         public int Matricule { get; set; }
+        [DataType(DataType.PhoneNumber)]
+        [StringLength(10)]
+        public string? Tel { get; set; }
     }
 }
