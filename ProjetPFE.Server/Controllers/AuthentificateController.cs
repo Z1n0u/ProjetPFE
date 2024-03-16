@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjetPFE.Server.Data;
 using ProjetPFE.Server.DTO;
 using ProjetPFE.Server.Models;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,10 +16,12 @@ namespace ProjetPFE.Server.Controllers
     public class AuthentificateController : ControllerBase
     {
        private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _config;
 
-        public AuthentificateController(ApplicationDbContext context)
+        public AuthentificateController(ApplicationDbContext context , IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         
@@ -67,7 +71,7 @@ namespace ProjetPFE.Server.Controllers
 
         [HttpPost]
         [Route("login")]
-        public IActionResult Login([FromBody] LoginModel loginmodel)
+        public async Task<IActionResult> Login([FromBody] LoginModel loginmodel)
         {
             if (!ModelState.IsValid || loginmodel == null)
                 return StatusCode(400, new Response { Status = "Error", Message = "login Failed" });
@@ -75,9 +79,39 @@ namespace ProjetPFE.Server.Controllers
             var Existser = _context.Users.FirstOrDefault(u => u.Username == loginmodel.Username && u.Motdepasse == loginmodel.motdepasse);
             if (Existser == null)
                 return StatusCode(400, new Response { Status = "Error", Message = "login Failed make sure you entre the required information" });
-            
 
-            return Ok();
+            // hado claims homa li fihom les info li 7andirohom fi coockies hana 3and user normal ukon 3ando role user
+            //bach na9adro njiriw washm les page li ya9der yadkhol lihom
+            var claims = new List<Claim> {
+                new Claim("role", "user"),
+                new Claim("username",loginmodel.Username)
+            };
+            //hadi ghir var bach nrécupiri el coockiename mil appsettings.json
+            var Thecoockiename = _config.GetValue<string>("Thecoockiename");
+            //bil claims  ncreeyiw Identities 
+            var Identity = new ClaimsIdentity(claims, Thecoockiename);
+            
+            // wa hado les indentities na7atohom fi claimsprincipal 
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(Identity);
+           
+            //ombe3da hadok les claims principale nakhdmo bihom el coockie bi singinasync hiya les 7at codi el coockie 
+            //3ala 7asab 7ana wash khayarna coockie scheme li howa hana 'thecoockiename'
+            await HttpContext.SignInAsync(Thecoockiename, claimsPrincipal);
+
+            return Ok(new Response { Status = "Success", Message = "Login seccessesful" });
+        }
+
+        //NOTE : lazem la logout button mwrapiya fi <form> khatach hada endpoint post tsema yposti lil endpoint
+        //hadi "api/authentificate/logout", yeclicki 3ala logout button bach yetssuprima el coockie tsema
+        //lazem ya3awad ylogi in bach ya9der yaddkhol lil les page li fihom [authorize]
+        //[NonAction]
+        
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(_config.GetValue<string>("Thecoockiename"));
+            return Ok(new Response { Status = "seccess", Message = "logout seccessesful" });
         }
     }
 }

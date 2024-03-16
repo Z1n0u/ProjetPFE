@@ -13,9 +13,11 @@ namespace ProjetPFE.Server.DTO
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
+        [MinLength(11)]
         public string? Motdepasse { get; set; }
         [DataType(DataType.Password)]
         [Compare(nameof(Motdepasse))]
+       
         public string? ConfirmMotdepasse { get; set; }
         [Required(ErrorMessage = "nom is required")]
         public string? Nom { get; set; }
@@ -31,6 +33,7 @@ namespace ProjetPFE.Server.DTO
         public int Matricule { get; set; }
         [DataType(DataType.PhoneNumber)]
         [StringLength(10)]
+        [MinLength(10)]
         public string? Tel { get; set; }
     }
 }
