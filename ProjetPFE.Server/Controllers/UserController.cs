@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjetPFE.Server.Data;
+using ProjetPFE.Server.DTO;
 using ProjetPFE.Server.Models;
+using System.Linq;
+using System.Security.Claims;
 
 namespace ProjetPFE.Server.Controllers
 {
@@ -9,44 +11,41 @@ namespace ProjetPFE.Server.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(ApplicationDbContext applicationDbContext)
+        public UserController(ApplicationDbContext context)
         {
-            _applicationDbContext = applicationDbContext;
+            _context = context;
         }
-                
 
         [HttpPost]
-        [Route("AddUser")]
-        public async Task<IActionResult> AddUser(User ObjUser)
+        [Route("UpdateProfile")]
+        public IActionResult UpdateProfile([FromBody] RegisterModel userProfile)
         {
-            var user = new User
+            if (!User.Identity.IsAuthenticated)
             {
-                Username = ObjUser.Username,
-                Email = ObjUser.Email,
-                Poste = ObjUser.Poste,
-                Motdepasse = ObjUser.Motdepasse,
-                Tel = ObjUser.Tel,
-                Matricule = ObjUser.Matricule,
-                Nom = ObjUser.Nom,
-                Prenom = ObjUser.Prenom,
-                Adresse = ObjUser.Adresse,
-            };
+                return Unauthorized(new { message = "User not authorized" });
+            }
 
+            var username = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
 
+            if (user == null)
+            {
+                return NotFound(new { message = " User not found" });
+            }
 
+            user.Nom = userProfile.Nom;
+            user.Email = userProfile.Email;
+            user.Adresse = userProfile.Adresse;
+            user.Tel = userProfile.Tel;
+            user.Prenom = userProfile.Prenom;
+            user.Matricule = userProfile.Matricule;
+            user.Motdepasse = userProfile.Motdepasse;
+            user.DateNaiss = userProfile.DateNaiss;
 
-            await _applicationDbContext.Users.AddAsync(user);
-            await _applicationDbContext.SaveChangesAsync();
-            return (IActionResult)user;
+            _context.SaveChanges();
+            return Ok(new { message = "Profile updated" });
         }
-            //[HttpPost]
-            //public async Task<User> UpdateUser(User objUser)
-            //{
-            //
-            //}
-
-
     }
 }
