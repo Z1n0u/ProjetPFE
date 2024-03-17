@@ -139,7 +139,9 @@ namespace ProjetPFE.Server.Controllers
             user.Adresse = userProfile.Adresse;
             user.Tel=userProfile.Tel;
             user.Prenom=userProfile.Prenom;
-            user.Email=userProfile.Email;
+            user.Matricule = userProfile.Matricule;
+            user.Motdepasse = userProfile.Motdepasse;
+            user.DateNaiss = userProfile.DateNaiss;
 
             _context.SaveChanges();
             return Ok(new {message ="Profile updated"});
