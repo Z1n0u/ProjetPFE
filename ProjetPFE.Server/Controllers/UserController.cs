@@ -20,7 +20,7 @@ namespace ProjetPFE.Server.Controllers
 
         [HttpPost]
         [Route("UpdateProfile")]
-        public IActionResult UpdateProfile([FromBody] RegisterModel userProfile)
+        public IActionResult UpdateProfile([FromBody] ProfileModel userProfile)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -43,6 +43,7 @@ namespace ProjetPFE.Server.Controllers
             user.Matricule = userProfile.Matricule;
             user.Motdepasse = userProfile.Motdepasse;
             user.DateNaiss = userProfile.DateNaiss;
+            
 
             _context.SaveChanges();
             return Ok(new { message = "Profile updated" });
