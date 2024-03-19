@@ -28,8 +28,8 @@ namespace ProjetPFE.Server.DTO
         public string? Poste { get; set; }
         
         public string? Adresse { get; set; }
-        
-        public int Matricule { get; set; }
+        [Required]
+        public string? Matricule { get; set; }
         [DataType(DataType.PhoneNumber)]
         [StringLength(10)]
         [MinLength(10)]
