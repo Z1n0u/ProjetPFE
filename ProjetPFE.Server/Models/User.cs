@@ -16,6 +16,7 @@ namespace ProjetPFE.Server.Models
         [StringLength(100)]
         public string? Prenom { get; set; }
         public DateOnly DateNaiss { get; set; }
+        [Required]
         public string? Poste { get; set; }
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
@@ -27,6 +28,7 @@ namespace ProjetPFE.Server.Models
         [Required]
         public string Matricule { get; set; }
         [DataType(DataType.Password)]
+        [Required]
         public string? Motdepasse { get; set; }
         public bool IsActive { get; set; } = false;
         public List<Fiche>? Fiches { get; set; }

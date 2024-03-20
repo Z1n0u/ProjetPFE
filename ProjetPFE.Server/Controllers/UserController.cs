@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjetPFE.Server.Data;
 using ProjetPFE.Server.DTO;
@@ -19,16 +20,12 @@ namespace ProjetPFE.Server.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         [HttpGet]
         [Route("GetProfile")]
         public IActionResult GetProfile()
         {
-            // Vérifier si l'utilisateur est authentifié
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Unauthorized(new { message = "User not authorized" });
-            }
+            
 
             // Récupérer le nom d'utilisateur de l'utilisateur connecté
             var username = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
@@ -57,16 +54,12 @@ namespace ProjetPFE.Server.Controllers
                              new string('*', Math.Max(0, user.Motdepasse.Length - 3))
         });
         }
-
+        [Authorize]
         [HttpPost]
         [Route("UpdateProfile")]
         public IActionResult UpdateProfile([FromBody] ProfileModel userProfile)
         {
-            // Vérifier si l'utilisateur est authentifié
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Unauthorized(new { message = "User not authorized" });
-            }
+           
 
             // Récupérer le nom d'utilisateur de l'utilisateur connecté
             var username = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
@@ -111,7 +104,7 @@ namespace ProjetPFE.Server.Controllers
             }
             if (!string.IsNullOrWhiteSpace(userProfile.Motdepasse))
             {
-                // Note : Cette logique de mise à jour du mot de passe peut nécessiter une implémentation différente en fonction de vos besoins de sécurité
+                
                 user.Motdepasse = userProfile.Motdepasse;
             }
 
