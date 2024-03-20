@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjetPFE.Server.Data;
 
@@ -11,9 +12,11 @@ using ProjetPFE.Server.Data;
 namespace ProjetPFE.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319234638_ChangerRisque")]
+    partial class ChangerRisque
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,11 +296,10 @@ namespace ProjetPFE.Server.Migrations
 
                     b.Property<string>("Label_Risque")
                         .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Sous_CategorieLabel_Sous_Categorie")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id_Risque");
@@ -507,9 +509,7 @@ namespace ProjetPFE.Server.Migrations
 
                     b.HasOne("ProjetPFE.Server.Models.Sous_Categorie", "Sous_Categorie")
                         .WithMany("Risques")
-                        .HasForeignKey("Sous_CategorieLabel_Sous_Categorie")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Sous_CategorieLabel_Sous_Categorie");
 
                     b.Navigation("Fiche");
 
