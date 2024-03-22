@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using ProjetPFE.Server.Data;
 using ProjetPFE.Server.DTO;
@@ -33,10 +34,22 @@ namespace ProjetPFE.Server.Controllers
             {
                 return StatusCode(400,new Response {Status="Error", Message = "User Registration Failed" });
             }
+
+            var Existmatricule= _context.Users.FirstOrDefault(u => u.Matricule == registerModel.Matricule);
+
+            if (Existmatricule != null)
+                return StatusCode(402, new Response { Status = "Error", Message = "il y a un compte deja cree par ce matricule" });
+                           
+
             var user = _context.Users.FirstOrDefault(u=> u.Username == registerModel.Username);
+            
             if (user != null)
-                return StatusCode(401, new Response { Status = "Error", Message = "UserName already Taken please chose another username" });
-           
+                return StatusCode(409, new Response { Status = "Error", Message = "UserName already Taken please chose another username" });
+
+            var Agence = _context.Agences.Find(registerModel.CodeAgence);
+            if (Agence==null)
+                return StatusCode(401, new Response { Status = "Error", Message = "l'agence passe n'existe pas" });
+            
             var Newuser = new User()
                 {
                     Username = registerModel.Username,
@@ -49,6 +62,7 @@ namespace ProjetPFE.Server.Controllers
                     Email = registerModel.Email,
                     Tel = registerModel.Tel,
                     Motdepasse = registerModel.Motdepasse,
+                    Agence = Agence,
                 };
             try
             {

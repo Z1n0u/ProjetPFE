@@ -30,10 +30,12 @@ namespace ProjetPFE.Server.DTO
         [Required(ErrorMessage = "adresse is required")]
         public string? Adresse { get; set; }
         [Required(ErrorMessage = "matricule is required")]
-        public int Matricule { get; set; }
+        public string? Matricule { get; set; }
         [DataType(DataType.PhoneNumber)]
         [StringLength(10)]
         [MinLength(10)]
         public string? Tel { get; set; }
+        [Required(ErrorMessage = "code agence is required")]
+        public int CodeAgence { get; set; }
     }
 }

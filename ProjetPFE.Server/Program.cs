@@ -32,7 +32,16 @@ builder.Services.AddAuthorization(option =>
     //hadi lil user 
     option.AddPolicy("UserPageOnly", policy => policy.RequireClaim("role", "user"));
 });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("reactfrontPolicy", Policybuilder =>
+    {
+        Policybuilder.WithOrigins("https://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -59,5 +68,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
-
+app.UseCors("reactfrontPolicy");
 app.Run();
