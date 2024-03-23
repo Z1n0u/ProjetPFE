@@ -42,11 +42,24 @@ body {
     width: 100%;
     
 }
-.form_wrapper{
-    display:flex;
-    flex-direction:column;
-    
-    gap:10px;
+.succes_wrapper{
+    padding:10px;
+    border-radius:3px;
+}
+    .succes_wrapper h1{
+        color:var(--secondary-color);
+       
+    }
+    .errmsg {
+        background-color: orangered;
+        color: white;
+        padding: 3px;
+        border-radius: 3px
+    }
+.form_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .line {
     border: 1px solid var(--secondary-color);

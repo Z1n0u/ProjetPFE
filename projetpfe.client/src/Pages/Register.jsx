@@ -23,7 +23,7 @@ function Register() {
     const [Validmatricule, SetValidmatricule] = useState(false);
 
     const [address, Setaddress] = useState("");
-    const [poste, Setposte] = useState("");
+    const [poste, Setposte] = useState("Directeur");
 
     const [datenaiss, Setdatenaiss] = useState("");
     const [Validdatenaiss, SetValiddatenaiss] = useState(false);
@@ -38,36 +38,34 @@ function Register() {
     const [ValidmatchMdp, SetValidmatchMdp] = useState(false);
 
     const [errmsg, Seterrmsg] = useState("");
-    const [seccess, Setseccess] = useState(false);
+    const [success, Setsuccess] = useState(false);
     //const navigate = useNavigate();
 
     const handlesubmit = async (e) => {
         e.preventDefault();
         const transObj = { nom: nom, prenom: prenom, username: username, email: email, tel: Tel, matricule: matricule, adresse: address, dateNaiss: datenaiss, codeAgence: CodeAgence, motdepasse: motdepasse, confirmMotdepasse: confmotdepasse, poste: poste }
         if (nom != null && prenom != null && Validusername && Validemail && Validtel && Validmatricule && poste != null && address != null && Validdatenaiss && Validmotdepasse && ValidmatchMdp) {
-            try {
-                const response = await fetch('https://localhost:7078/api/Authentificate/register', {
-                    method: "POST",
-                    headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify(transObj)
-
-                    //JSON.stringify({ user, pwd }),
-                    //{
-                    //    headers: { 'Content-Type': 'application/json' },
-                    //    withCredentials: true
-                    //}
-                });
-                console.log("hellow");
-                console.log(response.json);
+            
+            const response = await fetch('https://localhost:7078/api/Authentificate/register', {
+                method: "POST",
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(transObj)
+            })
+            if (!response.ok) {
+                const data = await response.json();
+                const info = data.message;
+                Seterrmsg(info);
             }
-            catch (err) {
-                if (!err?.response) {
-                    Seterrmsg('No Server Response');
-                } else if (err.response?.status === 409) {
-                    Seterrmsg('Username Taken');
+            else {
+                if (response.ok) {
+                    Setsuccess(true);
+                }
+                else {
+                    throw new Error('error de connection au server');
                 }
             }
         }
+        
     }
 
     useEffect(() => {
@@ -99,11 +97,21 @@ function Register() {
     //kolma yaktib fi kach input el user na7iwlo el error message khatach raho yabadil fih
     useEffect(() => {
         Seterrmsg("");
-    }, [username, motdepasse, confmotdepasse])
+    }, [username, motdepasse, confmotdepasse, nom, prenom, email, matricule, Tel, datenaiss, CodeAgence])
 
     return (
         <>
-            <div className="register_wrapper">
+            {success ? (
+                <div className="succes_wrapper">
+                    <h1>Success!</h1>
+                    <p>
+                        <button href="#" className="btn btn-primary">Go to Log in</button>
+                    </p>
+                </div>
+            ) : (    
+            
+               <div className="register_wrapper">
+                        <p className={errmsg ? "errmsg" : "offscreen"} aria-live="assertive">{errmsg}</p>
                 <form className="form_wrapper" >
                     <div className="header_card">
                         <img src="src/assets/logo-bna@2x.ce72e696.png"></img>
@@ -149,7 +157,7 @@ function Register() {
                                 aria-invalid={Validusername ? "false" : "true"}
                                 aria-describedby="uidnote"
                             />
-                            <p id="uidnote" className={/*userFocus &&*/ username && !Validusername ? "instructions" : "offscreen"}>
+                            <p id="uidnote" className={ username && !Validusername ? "instructions" : "offscreen"}>
                                 4 a 24 caracteres.<br />
                                 Ils doivent commencer par :<br />
                                 une lettre.Les lettres, les chiffres,
@@ -170,7 +178,7 @@ function Register() {
                                 aria-invalid={Validemail ? "false" : "true"}
                                 aria-describedby="uidnote"
                             />
-                            <p id="uidnote" className={/*userFocus &&*/ email && !Validemail ? "instructions" : "offscreen"}>
+                            <p id="uidnote" className={ email && !Validemail ? "instructions" : "offscreen"}>
                                 Un courriel devrait ressembler a <br/>
                                 : user@example.com
                             </p>
@@ -205,7 +213,7 @@ function Register() {
                                 aria-invalid={Validtel ? "false" : "true"}
                                 aria-describedby="uidnote"
                             />
-                            <p id="uidnote" className={/*userFocus &&*/ Tel && !Validtel ? "instructions" : "offscreen"}>
+                            <p id="uidnote" className={ Tel && !Validtel ? "instructions" : "offscreen"}>
                                 le Tel doit etre de type numerique avec 10 chiffres et commencer par 0
                             </p>
                         </div>
@@ -253,13 +261,13 @@ function Register() {
                         <div className="datenaiss_groupe">
                             <label>Date de Naissance <span className="star">*</span></label>
                             <input type="date" id="datenaiss" onChange={e => Setdatenaiss(e.target.value)}></input>
-                            <p id="uidnote" className={/*userFocus &&*/ datenaiss && !Validdatenaiss ? "instructions_datenais" : "offscreen"}>
+                            <p id="uidnote" className={ datenaiss && !Validdatenaiss ? "instructions_datenais" : "offscreen"}>
                                 age doit etre superier 18
                             </p>
                         </div>
                         <div className="Poste_input">
                             <label>Poste <span className="star">*</span></label>
-                            <select className="poste_liste" onChange={e => Setposte(e.target.value)}>
+                            <select className="poste_liste" onChange={e => Setposte(e.target.value)}>       
                                 <option value="Directeur">Directeur</option>
                                 <option value="Agent">Agent</option>
                             </select>
@@ -279,7 +287,7 @@ function Register() {
                     </div>
                     <div className="adresse_groupe">
                         <label>Adresse <span className="star">*</span></label>
-                        <input type="text" value={address} onChange={e => Setaddress(e.target.value)} className="form_input_adresse"></input>
+                                <textarea  value={address} onChange={e => Setaddress(e.target.value)} className="form_input_adresse" ></textarea>
                     </div>
                     <div className="footer_card">
                         <a className="login_link">Already have an account ? Log in</a>
@@ -288,7 +296,8 @@ function Register() {
                         </button>
                     </div>
                 </form>
-            </div>
+                </div>
+            )}
         </>
     );
 }

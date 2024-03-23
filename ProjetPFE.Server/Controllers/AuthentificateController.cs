@@ -40,10 +40,11 @@ namespace ProjetPFE.Server.Controllers
             if (Existmatricule != null)
                 return StatusCode(402, new Response { Status = "Error", Message = "il y a un compte deja cree par ce matricule" });
                            
-
+            var adminusername= _context.Admins.FirstOrDefault(a => a.Username == registerModel.Username);
+            
             var user = _context.Users.FirstOrDefault(u=> u.Username == registerModel.Username);
             
-            if (user != null)
+            if (user != null || adminusername != null)
                 return StatusCode(409, new Response { Status = "Error", Message = "UserName already Taken please chose another username" });
 
             var Agence = _context.Agences.Find(registerModel.CodeAgence);
@@ -89,28 +90,53 @@ namespace ProjetPFE.Server.Controllers
         {
             if (!ModelState.IsValid || loginmodel == null)
                 return StatusCode(400, new Response { Status = "Error", Message = "login Failed" });
-
-            var Existser = _context.Users.FirstOrDefault(u => u.Username == loginmodel.Username && u.Motdepasse == loginmodel.motdepasse);
-            if (Existser == null)
-                return StatusCode(400, new Response { Status = "Error", Message = "login Failed make sure you entre the required information" });
-
-            // hado claims homa li fihom les info li 7andirohom fi coockies hana 3and user normal ukon 3ando role user
-            //bach na9adro njiriw washm les page li ya9der yadkhol lihom
-            var claims = new List<Claim> {
-                new Claim("role", "user"),
-                new Claim("username",loginmodel.Username)
-            };
+            
             //hadi ghir var bach nrécupiri el coockiename mil appsettings.json
             var Thecoockiename = _config.GetValue<string>("Thecoockiename");
-            //bil claims  ncreeyiw Identities 
-            var Identity = new ClaimsIdentity(claims, Thecoockiename);
+
+            var Existadmin =_context.Admins.FirstOrDefault(a => a.Username == loginmodel.Username);
+            if (Existadmin != null)
+            {
+                var claims = new List<Claim> {
+                new Claim("role", "admin"),
+                new Claim("username",loginmodel.Username)
+                };
+                
+                
+                //bil claims  ncreeyiw Identities 
+                var Identity = new ClaimsIdentity(claims, Thecoockiename);
+
+                // wa hado les indentities na7atohom fi claimsprincipal 
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(Identity);
+                //ombe3da hadok les claims principale nakhdmo bihom el coockie bi singinasync hiya les 7at codi el coockie 
+                //3ala 7asab 7ana wash khayarna coockie scheme li howa hana 'thecoockiename'
+                await HttpContext.SignInAsync(Thecoockiename, claimsPrincipal);
+            }
+            else
+            {
+
+                var Existser = _context.Users.FirstOrDefault(u => u.Username == loginmodel.Username && u.Motdepasse == loginmodel.motdepasse);
+                if (Existser == null)
+                    return StatusCode(400, new Response { Status = "Error", Message = "login Failed make sure you entre the required information" });
+
+                // hado claims homa li fihom les info li 7andirohom fi coockies hana 3and user normal ukon 3ando role user
+                //bach na9adro njiriw washm les page li ya9der yadkhol lihom
+                var claims = new List<Claim> {
+                    new Claim("role", "user"),
+                    new Claim("username",loginmodel.Username)
+                };
+                
+                
+                //bil claims  ncreeyiw Identities 
+                var Identity = new ClaimsIdentity(claims, Thecoockiename);
             
-            // wa hado les indentities na7atohom fi claimsprincipal 
-            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(Identity);
+                // wa hado les indentities na7atohom fi claimsprincipal 
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(Identity);
+                //ombe3da hadok les claims principale nakhdmo bihom el coockie bi singinasync hiya les 7at codi el coockie 
+                //3ala 7asab 7ana wash khayarna coockie scheme li howa hana 'thecoockiename'
+                await HttpContext.SignInAsync(Thecoockiename, claimsPrincipal);
+            }
            
-            //ombe3da hadok les claims principale nakhdmo bihom el coockie bi singinasync hiya les 7at codi el coockie 
-            //3ala 7asab 7ana wash khayarna coockie scheme li howa hana 'thecoockiename'
-            await HttpContext.SignInAsync(Thecoockiename, claimsPrincipal);
 
             return Ok(new Response { Status = "Success", Message = "Login seccessesful" });
         }
