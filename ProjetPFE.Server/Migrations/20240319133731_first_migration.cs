@@ -11,6 +11,10 @@ namespace ProjetPFE.Server.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            if (!migrationBuilder.Sql(@"SELECT OBJECT_ID('Categories')").ToString().Equals(""))
+            {
+                return; // Si elle existe déjà, sortir de la méthode Up sans rien faire
+            }
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new

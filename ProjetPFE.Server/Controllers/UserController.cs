@@ -107,7 +107,10 @@ namespace ProjetPFE.Server.Controllers
                 
                 user.Motdepasse = userProfile.Motdepasse;
             }
-
+            if (!string.IsNullOrEmpty(userProfile.Poste))
+            {
+                user.Poste = userProfile.Poste;
+            }
             // Sauvegarder les modifications dans la base de données
             _context.SaveChanges();
 
