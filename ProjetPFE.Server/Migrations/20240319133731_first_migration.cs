@@ -129,7 +129,7 @@ namespace ProjetPFE.Server.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Adresse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tel = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Matricule = table.Column<int>(type: "int", nullable: false),
+                    Matricule = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Motdepasse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     AgenceCode_Agence = table.Column<int>(type: "int", nullable: true)

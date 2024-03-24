@@ -12,7 +12,7 @@ using ProjetPFE.Server.Data;
 namespace ProjetPFE.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240315001705_first_migration")]
+    [Migration("20240319133731_first_migration")]
     partial class first_migration
     {
         /// <inheritdoc />
@@ -370,8 +370,9 @@ namespace ProjetPFE.Server.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Matricule")
-                        .HasColumnType("int");
+                    b.Property<string>("Matricule")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Motdepasse")
                         .HasColumnType("nvarchar(max)");

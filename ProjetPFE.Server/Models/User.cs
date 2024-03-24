@@ -26,7 +26,7 @@ namespace ProjetPFE.Server.Models
         [StringLength(10)]
         public string? Tel { get; set; }
         [Required]
-        public string Matricule { get; set; }
+        public string? Matricule { get; set; }
         [DataType(DataType.Password)]
         [Required]
         public string? Motdepasse { get; set; }

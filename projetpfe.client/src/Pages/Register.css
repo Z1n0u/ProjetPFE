@@ -1,0 +1,141 @@
+body {
+    background-color: var(--background-color);
+    /*display:flex;
+    justify-content:center;
+    align-items:center;*/
+}
+.star{
+    color:orangered;
+}
+.offscreen{
+    position : absolute;
+    left:-1000px;
+}
+.instructions{
+    background-color:/*var(--secondary-color)*/ orangered;
+    padding: 5px;
+    border-radius:3px;
+    color:var(--primary-color);
+    font-size:small;
+    width:197px;
+    margin:5px 0px;
+}
+.form_group {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.form_input {
+    background-color: var( --inputfield-color);
+    border: 0.2px solid var(--dark-color);
+    width: 200px;
+    height: 30px;
+    border-radius: 3px;
+}
+.register_wrapper {
+    background-color: var(--primary-color);
+    box-shadow: -4px 4px 10px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    padding: 15px 30px 15px 30px;
+    width: 100%;
+    
+}
+.succes_wrapper{
+    padding:10px;
+    border-radius:3px;
+}
+    .succes_wrapper h1{
+        color:var(--secondary-color);
+       
+    }
+    .errmsg {
+        background-color: orangered;
+        color: white;
+        padding: 3px;
+        border-radius: 3px
+    }
+.form_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.line {
+    border: 1px solid var(--secondary-color);
+    width:100%;
+    opacity:0.27;
+}
+.header_card img {
+    width: 300px;
+}
+.header_card {
+    width: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.form_row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form_row_three {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items:flex-start;
+}
+.datenaiss_groupe{
+    display:flex;
+    flex-direction:column;
+}
+.Poste_input {
+    display: flex;
+    flex-direction: column;
+}
+.poste_liste{
+    height:36px;
+}
+
+#datenaiss {
+    border: 1px solid #c4c4c4;
+    border-radius: 3px;
+    background-color: #fff;
+    padding: 3px 5px;
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+    width: 90%;
+    height: 29px;
+}
+.instructions_datenais {
+    background-color: /*var(--secondary-color)*/ orangered;
+    padding: 5px;
+    border-radius: 3px;
+    color: var(--primary-color);
+    font-size: small;
+    width: 90%;
+    margin: 5px 0px;
+}
+.adresse_groupe {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form_input_adresse {
+    background-color: var( --inputfield-color);
+    border: 1px solid var(--dark-color);
+    width: 99%;
+    height: 80px;
+    border-radius: 3px;
+}
+.footer_card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.login_link{
+    color:var(--secondary-color);
+    cursor:pointer;
+}
