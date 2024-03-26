@@ -1,0 +1,85 @@
+body {
+    background-color: var(--background-color);
+}
+
+.login_wrapper {
+    background-color: var(--primary-color);
+    box-shadow: -4px 4px 10px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    padding: 15px 30px 15px 30px;
+    width: 100%;
+}
+.form_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    gap: 15px;
+}
+.line {
+    border: 1px solid var(--secondary-color);
+    width: 100%;
+    opacity: 0.27;
+}
+.errmsg {
+    background-color: orangered;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
+}
+.header_card img {
+    width: 300px;
+}
+
+.header_card {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form_input_login {
+    background-color: var( --inputfield-color);
+    border: 0.2px solid var(--dark-color);
+    width: 250px;
+    height: 30px;
+    border-radius: 3px;
+}
+.form_group_login {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    
+}
+.offscreen {
+    position: absolute;
+    left: -1000px;
+}
+
+.instructions {
+    background-color: /*var(--secondary-color)*/ orangered;
+    padding: 5px;
+    border-radius: 3px;
+    color: var(--primary-color);
+    font-size: small;
+    width: 197px;
+    margin: 5px 0px;
+}
+.footer_card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top:40px;
+}
+.register_link {
+    color: var(--secondary-color);
+    cursor: pointer;
+}
+.password_groupe{
+    display:flex;
+    flex-direction:column;
+    text-align:right;
+}
+.dont_have_account {
+    color: var(--dark-color);
+}

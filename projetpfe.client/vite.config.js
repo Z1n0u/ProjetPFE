@@ -43,8 +43,8 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/api/Authentificate/register': {
-                target: 'https://localhost:7078/',
+            '^/api/Authentificate': {
+                target,
                 secure: false
             }
         },

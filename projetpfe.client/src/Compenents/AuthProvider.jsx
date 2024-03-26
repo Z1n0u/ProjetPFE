@@ -1,0 +1,16 @@
+import { createContext, useState } from "react";
+
+//hada code bach na7oto auth comme variable global li kamil les compenents fil app
+const AuthContext = createContext({});
+
+export const AuthProvider = ({ children }) => {
+    const [auth, setAuth] = useState({});
+
+    return (
+        <AuthContext.Provider value={{ auth, setAuth }}>
+            {children}
+        </AuthContext.Provider>
+    )
+}
+
+export default AuthContext;

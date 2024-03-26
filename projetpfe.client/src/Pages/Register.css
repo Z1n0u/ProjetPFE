@@ -79,6 +79,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width:100%;
 }
 
 .form_row_three {
@@ -86,6 +87,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items:flex-start;
+    width:100%;
 }
 .datenaiss_groupe{
     display:flex;
@@ -121,6 +123,7 @@ body {
     display: flex;
     flex-direction: column;
     text-align: left;
+    width:100%
 }
 
 .form_input_adresse {

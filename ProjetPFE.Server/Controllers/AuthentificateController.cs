@@ -44,7 +44,7 @@ namespace ProjetPFE.Server.Controllers
             
             var user = _context.Users.FirstOrDefault(u=> u.Username == registerModel.Username);
             
-            if (user != null || adminusername != null)
+            if (adminusername != null || user != null)
                 return StatusCode(409, new Response { Status = "Error", Message = "UserName already Taken please chose another username" });
 
             var Agence = _context.Agences.Find(registerModel.CodeAgence);
@@ -89,7 +89,7 @@ namespace ProjetPFE.Server.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel loginmodel)
         {
             if (!ModelState.IsValid || loginmodel == null)
-                return StatusCode(400, new Response { Status = "Error", Message = "login Failed" });
+                return StatusCode(400, new { Status = "Error" , Message = "login Failed" });
             
             //hadi ghir var bach nrécupiri el coockiename mil appsettings.json
             var Thecoockiename = _config.GetValue<string>("Thecoockiename");
@@ -111,13 +111,14 @@ namespace ProjetPFE.Server.Controllers
                 //ombe3da hadok les claims principale nakhdmo bihom el coockie bi singinasync hiya les 7at codi el coockie 
                 //3ala 7asab 7ana wash khayarna coockie scheme li howa hana 'thecoockiename'
                 await HttpContext.SignInAsync(Thecoockiename, claimsPrincipal);
+               
             }
             else
             {
 
                 var Existser = _context.Users.FirstOrDefault(u => u.Username == loginmodel.Username && u.Motdepasse == loginmodel.motdepasse);
                 if (Existser == null)
-                    return StatusCode(400, new Response { Status = "Error", Message = "login Failed make sure you entre the required information" });
+                    return StatusCode(401, new Response { Status = "Error", Message = "unautherized" });
 
                 // hado claims homa li fihom les info li 7andirohom fi coockies hana 3and user normal ukon 3ando role user
                 //bach na9adro njiriw washm les page li ya9der yadkhol lihom
@@ -135,10 +136,9 @@ namespace ProjetPFE.Server.Controllers
                 //ombe3da hadok les claims principale nakhdmo bihom el coockie bi singinasync hiya les 7at codi el coockie 
                 //3ala 7asab 7ana wash khayarna coockie scheme li howa hana 'thecoockiename'
                 await HttpContext.SignInAsync(Thecoockiename, claimsPrincipal);
+               
             }
-           
-
-            return Ok(new Response { Status = "Success", Message = "Login seccessesful" });
+            return Ok(new { Status = "Success", Message = "Login seccessesful" });
         }
 
         //NOTE : lazem la logout button mwrapiya fi <form> khatach hada endpoint post tsema yposti lil endpoint
@@ -146,12 +146,33 @@ namespace ProjetPFE.Server.Controllers
         //lazem ya3awad ylogi in bach ya9der yaddkhol lil les page li fihom [authorize]
         //[NonAction]
         
-        [HttpPost]
+        [HttpPost,Authorize]
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(_config.GetValue<string>("Thecoockiename"));
             return Ok(new Response { Status = "seccess", Message = "logout seccessesful" });
+        }
+
+
+       
+        [HttpGet]
+        [Route("PingAuth")]
+        public IActionResult Pingauth()
+        {
+
+
+            // Vérifier si l'utilisateur existe
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+                var username = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+                return Ok(new { role, username , isAuthentificated = "true"});
+            }
+            else
+            {
+                return StatusCode(401, new Response { Status = "Error", Message = "Unauthorized" });
+            }
         }
     }
 }

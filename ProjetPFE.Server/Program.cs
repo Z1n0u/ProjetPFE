@@ -21,6 +21,8 @@ builder.Services.AddAuthentication(thecoockiename).AddCookie(thecoockiename , op
     option.AccessDeniedPath = "/";
     //hadi bach el coockie tab9a valide li 10 sawaya3 sinon ki yakhlaso lazem ya3awed ylogi in
     option.ExpireTimeSpan = TimeSpan.FromHours(10);
+    option.Cookie.SecurePolicy= CookieSecurePolicy.Always;
+    option.Cookie.SameSite=SameSiteMode.None;
 });
 
 builder.Services.AddAuthorization(option =>

@@ -111,7 +111,7 @@ function Register() {
             ) : (    
             
                <div className="register_wrapper">
-                        <p className={errmsg ? "errmsg" : "offscreen"} aria-live="assertive">{errmsg}</p>
+                <p className={errmsg ? "errmsg" : "offscreen"} aria-live="assertive">{errmsg}</p>
                 <form className="form_wrapper" >
                     <div className="header_card">
                         <img src="src/assets/logo-bna@2x.ce72e696.png"></img>
